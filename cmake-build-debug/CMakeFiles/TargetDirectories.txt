@@ -1,0 +1,3 @@
+C:/Users/xsj/CLionProjects/C_compiler/cmake-build-debug/CMakeFiles/C_compiler.dir
+C:/Users/xsj/CLionProjects/C_compiler/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/xsj/CLionProjects/C_compiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir
