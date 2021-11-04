@@ -74,17 +74,38 @@ CMakeFiles\C_compiler.dir\main.cpp.s: cmake_force
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\C_compiler.dir\main.cpp.s /c C:\Users\xsj\CLionProjects\C_compiler\main.cpp
 <<
 
+CMakeFiles\C_compiler.dir\lexer.cpp.obj: CMakeFiles\C_compiler.dir\flags.make
+CMakeFiles\C_compiler.dir\lexer.cpp.obj: ..\lexer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/C_compiler.dir/lexer.cpp.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1426~1.288\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\C_compiler.dir\lexer.cpp.obj /FdCMakeFiles\C_compiler.dir\ /FS -c C:\Users\xsj\CLionProjects\C_compiler\lexer.cpp
+<<
+
+CMakeFiles\C_compiler.dir\lexer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/C_compiler.dir/lexer.cpp.i"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1426~1.288\bin\Hostx86\x86\cl.exe > CMakeFiles\C_compiler.dir\lexer.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\xsj\CLionProjects\C_compiler\lexer.cpp
+<<
+
+CMakeFiles\C_compiler.dir\lexer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/C_compiler.dir/lexer.cpp.s"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1426~1.288\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\C_compiler.dir\lexer.cpp.s /c C:\Users\xsj\CLionProjects\C_compiler\lexer.cpp
+<<
+
 # Object files for target C_compiler
 C_compiler_OBJECTS = \
-"CMakeFiles\C_compiler.dir\main.cpp.obj"
+"CMakeFiles\C_compiler.dir\main.cpp.obj" \
+"CMakeFiles\C_compiler.dir\lexer.cpp.obj"
 
 # External object files for target C_compiler
 C_compiler_EXTERNAL_OBJECTS =
 
 C_compiler.exe: CMakeFiles\C_compiler.dir\main.cpp.obj
+C_compiler.exe: CMakeFiles\C_compiler.dir\lexer.cpp.obj
 C_compiler.exe: CMakeFiles\C_compiler.dir\build.make
 C_compiler.exe: CMakeFiles\C_compiler.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable C_compiler.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable C_compiler.exe"
 	"C:\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\C_compiler.dir --rc=D:\WINDOW~1\10\bin\100183~1.0\x86\rc.exe --mt=D:\WINDOW~1\10\bin\100183~1.0\x86\mt.exe --manifests -- C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1426~1.288\bin\Hostx86\x86\link.exe /nologo @CMakeFiles\C_compiler.dir\objects1.rsp @<<
  /out:C_compiler.exe /implib:C_compiler.lib /pdb:C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\C_compiler.pdb /version:0.0 /machine:X86 /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib 
 <<

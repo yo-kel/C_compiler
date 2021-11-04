@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/xsj/CLionProjects/C_compiler/lexer.cpp" "C:/Users/xsj/CLionProjects/C_compiler/cmake-build-debug/CMakeFiles/C_compiler.dir/lexer.cpp.obj"
   "C:/Users/xsj/CLionProjects/C_compiler/main.cpp" "C:/Users/xsj/CLionProjects/C_compiler/cmake-build-debug/CMakeFiles/C_compiler.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "MSVC")

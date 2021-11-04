@@ -118,6 +118,30 @@ C_compiler\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\build
 .PHONY : C_compiler\fast
 
+lexer.obj: lexer.cpp.obj
+.PHONY : lexer.obj
+
+# target to build an object file
+lexer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\lexer.cpp.obj
+.PHONY : lexer.cpp.obj
+
+lexer.i: lexer.cpp.i
+.PHONY : lexer.i
+
+# target to preprocess a source file
+lexer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\lexer.cpp.i
+.PHONY : lexer.cpp.i
+
+lexer.s: lexer.cpp.s
+.PHONY : lexer.s
+
+# target to generate assembly for a file
+lexer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\lexer.cpp.s
+.PHONY : lexer.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -151,6 +175,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... C_compiler
+	@echo ... lexer.obj
+	@echo ... lexer.i
+	@echo ... lexer.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

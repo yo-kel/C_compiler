@@ -84,6 +84,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/lexer.cpp">
+			<Option target="C_compiler"/>
+		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/lexer.h">
+			<Option target="C_compiler"/>
+		</Unit>
 		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/main.cpp">
 			<Option target="C_compiler"/>
 		</Unit>

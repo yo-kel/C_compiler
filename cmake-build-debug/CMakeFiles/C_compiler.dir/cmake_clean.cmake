@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/C_compiler.dir/lexer.cpp.obj"
   "CMakeFiles/C_compiler.dir/main.cpp.obj"
   "C_compiler.exe"
   "C_compiler.exe.manifest"

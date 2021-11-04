@@ -70,12 +70,12 @@ clean: CMakeFiles\C_compiler.dir\clean
 CMakeFiles\C_compiler.dir\all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target C_compiler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles --progress-num=1,2,3 "Built target C_compiler"
 .PHONY : CMakeFiles\C_compiler.dir\all
 
 # Build rule for subdir invocation for target.
 CMakeFiles\C_compiler.dir\rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles\C_compiler.dir\rule
