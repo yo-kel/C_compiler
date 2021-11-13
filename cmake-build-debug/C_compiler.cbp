@@ -93,6 +93,12 @@
 		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/main.cpp">
 			<Option target="C_compiler"/>
 		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/parser.cpp">
+			<Option target="C_compiler"/>
+		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/parser.h">
+			<Option target="C_compiler"/>
+		</Unit>
 		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

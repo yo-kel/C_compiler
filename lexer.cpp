@@ -5,13 +5,15 @@
 #pragma once
 
 #include <iostream>
-#include <lexer.h>
+#include "lexer.h"
 
 using namespace lexer;
 
 
 string::iterator str, lat_pos;
-vector <Token> tokenList;
+namespace lexer{
+    vector<Token> tokenList;
+}
 
 int line, column;
 
@@ -67,10 +69,10 @@ int lexer::ParseToken() {
             }
         } else if (isalpha(token) || token == '_') { // symbol
             lat_pos = str - 1;
-            while (isalnum(*str) || token == '_')nextStr();
+            while (token = *str, isalnum(token) || token == '_')nextStr();
             auto value = string(lat_pos, str);
             int keyword_id = isKeyword(value);
-            if (keyword_id == -1) tokenList.push_back(Token{SYMBOL, "symbol", value, line, column});
+            if (keyword_id == -1) tokenList.push_back(Token{ID, "id", value, line, column});
             else tokenList.push_back(Token{keyword_id, KEYWORD[keyword_id], "", line, column});
         } else if (isdigit(token)) { // number
             lat_pos = str - 1;
@@ -115,9 +117,15 @@ int lexer::ParseToken() {
             auto value = string(lat_pos, str - 1);
             tokenList.push_back(Token{STRING, "string", value, line, column});
         } else if (token == '+') {
-            tokenList.push_back(Token{ADD, "+", "", line, column});
+            if (*str == '+') {
+                nextStr();
+                tokenList.push_back(Token{INC, "++", "", line, column});
+            } else tokenList.push_back(Token{ADD, "+", "", line, column});
         } else if (token == '-') {
-            tokenList.push_back(Token{SUB, "-", "", line, column});
+            if (*str == '-') {
+                nextStr();
+                tokenList.push_back(Token{DEC, "--", "", line, column});
+            } else tokenList.push_back(Token{SUB, "-", "", line, column});
         } else if (token == '*') {
             tokenList.push_back(Token{MUL, "*", "", line, column});
         } else if (token == '<') {

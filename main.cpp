@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include "lexer.h"
+#include "parser.h"
 #include <fstream>
 #include <streambuf>
 #include <sstream>
@@ -26,7 +27,10 @@ int main(int argc, char **argv) {
     file_contents = file_contents + '\0';
     lexer::init(&file_contents);
     lexer::ParseToken();
-    lexer::outPrintTokenList();
+//    lexer::outPrintTokenList();
+    parser::init(&lexer::tokenList);
+    auto entry=parser::program();
+
 
     //std::string s = "((hi there))";
     //auto lp = s.begin() ;

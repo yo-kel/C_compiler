@@ -27,10 +27,10 @@ namespace lexer {
 
         IF, ELSE, GOTO, SWITCH, CASE, DO, WHILE, FOR, CONTINUE, BREAK, RETURN, DEFAULT,
         TYPEDEF, SIZEOF, AUTO, REGISTER, EXTERN, STATIC,
-        SYMBOL, STRING, NUMBER, CHARACTOR,
+        SYMBOL,ID, STRING, NUMBER, CHARACTOR,
 
-        //+ - * / < <= > >= = == != & | ^
-        ADD, SUB, MUL, DIV, LT, LTE, GT, GTE, ASSIGN, EQ, NE, LAND, LOR, XOR,
+        //+ - * / < <= > >= = == != & | ^ ++ --
+        ADD, SUB, MUL, DIV, LT, LTE, GT, GTE, ASSIGN, EQ, NE, LAND, LOR, XOR,INC,DEC,
         //. ; ( ) [ ] { } / \ , # && || !
         POI, SEMI, LP, RP, LB, RB, LC, RC, SLA, BSLA, COMMA, SIGN, AND, OR, NOT,
     };
@@ -40,16 +40,20 @@ namespace lexer {
     void init(string *tar);
 
     void outPrintTokenList();
+
+
+
+    struct Token {
+        int type;
+        string name;
+        string value;
+        int line;
+        int column;
+    };
+
+    extern vector<Token> tokenList;
 }
 
-struct Token {
-    int type;
-    string name;
-    string value;
-    int line;
-    int column;
-};
 
-extern vector<Token> tokenList;
 
 #endif //C_COMPILER_LEXER_H
