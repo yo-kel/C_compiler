@@ -18,7 +18,7 @@ namespace lexer {
             "unsigned", "signed", "const",
             "volatile", "enum", "struct", "union",
             "if", "else", "goto", "switch", "case", "do", "while", "for", "continue", "break", "return", "default",
-            "typedef", "sizeof", "auto", "register", "extern", "static",
+            "typedef", "sizeof", "auto", "register", "extern", "static","print"
     };
     enum {
         INT = 0, LONG, SHORT, FLOAT, DOUBLE, CHAR, VOID,
@@ -26,7 +26,7 @@ namespace lexer {
         VOLATILE, ENUM, STRUCT, UNION,
 
         IF, ELSE, GOTO, SWITCH, CASE, DO, WHILE, FOR, CONTINUE, BREAK, RETURN, DEFAULT,
-        TYPEDEF, SIZEOF, AUTO, REGISTER, EXTERN, STATIC,
+        TYPEDEF, SIZEOF, AUTO, REGISTER, EXTERN, STATIC,PRINT,
         SYMBOL,ID, STRING, NUMBER, CHARACTOR,
 
         //+ - * / < <= > >= = == != & | ^ ++ --

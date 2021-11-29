@@ -75,13 +75,22 @@ namespace parser {
         vector<Declaration *> declarationList;
         while (!checkToken(StringEOF)) {
             TypeVar *typeVar1 = ::typeVar();
-            DeclarationBody *declBody = nullptr;
             if (checkToken(lexer::LP)) {
-                declBody = funcDecl();
+                // declBody = funcDecl();
+
+                match(lexer::LP);
+                Params *paramsPtr = nullptr;
+                if (isTokenAType(*it)) {
+                    paramsPtr = ::params();
+                }
+                match(lexer::RP);
+                BlockStmt *blockStmtPtr = blockStmt();
+                declarationList.push_back(new FuncDecl(paramsPtr, blockStmtPtr, typeVar1));
+
             } else {
-                declBody = variableDecl();
+                // declBody = variableDecl();
+                declarationList.push_back(new VariableDecl(typeVar1));
             }
-            declarationList.push_back(new Declaration(typeVar1, declBody));
         }
         return new Program(declarationList);
     }
@@ -117,22 +126,22 @@ namespace parser {
         return nullptr;
     }
 
-    VariableDecl *variableDecl() {
-        //TODO {NUMBER}*
-        match(lexer::SEMI);
-        return new VariableDecl;
-    }
+//    VariableDecl *variableDecl() {
+//        //TODO {NUMBER}*
+//        match(lexer::SEMI);
+//        return new VariableDecl;
+//    }
 
-    FuncDecl *funcDecl() {
-        match(lexer::LP);
-        Params *paramsPtr = nullptr;
-        if (isTokenAType(*it)) {
-            paramsPtr = ::params();
-        }
-        match(lexer::RP);
-        BlockStmt *blockStmtPtr = blockStmt();
-        return new FuncDecl(paramsPtr, blockStmtPtr);
-    }
+//    FuncDecl *funcDecl() {
+//        match(lexer::LP);
+//        Params *paramsPtr = nullptr;
+//        if (isTokenAType(*it)) {
+//            paramsPtr = ::params();
+//        }
+//        match(lexer::RP);
+//        BlockStmt *blockStmtPtr = blockStmt();
+//        return new FuncDecl(paramsPtr, blockStmtPtr);
+//    }
 
     Params *params() {
         vector<TypeVar> paramList;
@@ -146,10 +155,10 @@ namespace parser {
     }
 
     LocalDecl *localDecl() {
-        vector<TypeVar> declList;
+        vector<TypeVar *> declList;
 
         while (isTokenAType(*it)) { // match {TypeVar}*
-            declList.push_back(*(::typeVar()));
+            declList.push_back(::typeVar());
             match(lexer::SEMI);
         }
         return new LocalDecl(declList);
@@ -166,6 +175,12 @@ namespace parser {
             return forStmt();
         } else if (checkToken(lexer::RETURN)) {
             return returnStmt();
+        } else if (checkToken(lexer::CONTINUE)) {
+            return continueStmt();
+        } else if (checkToken(lexer::BREAK)) {
+            return breakStmt();
+        } else if (checkToken(lexer::PRINT)) {
+            return printStmt();
         }
             //TODO Assert statement unimplemented
         else {
@@ -176,18 +191,21 @@ namespace parser {
 
     BlockStmt *blockStmt() {
         match(lexer::LC);
-        vector<LocalDecl *> localDeclList;
         vector<Statement *> statementList;
+        auto local = localDecl();
         while (!checkToken(lexer::RC)) {
-            if (isTokenAType(*it)) {
-                localDeclList.push_back(parser::localDecl());
-            } else {
-                statementList.push_back(parser::statement());
-            }
+            statementList.push_back(parser::statement());
         }
+//        while (!checkToken(lexer::RC)) {
+//            if (isTokenAType(*it)) {
+//                localDeclList.push_back(parser::localDecl());
+//            } else {
+//                statementList.push_back(parser::statement());
+//            }
+//        }
         match(lexer::RC);
 
-        return new BlockStmt(localDeclList, statementList);
+        return new BlockStmt(local, statementList);
     }
 
     IfStmt *ifStmt() {
@@ -221,6 +239,27 @@ namespace parser {
         if (!checkToken(lexer::SEMI))expr1 = expr();
         match(lexer::SEMI);
         return new ReturnStmt(expr1);
+    }
+
+    ContinueStmt *continueStmt() {
+        match(lexer::CONTINUE);
+        match(lexer::SEMI);
+        return new ContinueStmt();
+    }
+
+    BreakStmt *breakStmt() {
+        match(lexer::BREAK);
+        match(lexer::SEMI);
+        return new BreakStmt();
+    }
+
+    PrintStmt *printStmt() {
+        match(lexer::PRINT);
+        match(lexer::LP);
+        auto ex = expr();
+        match(lexer::RP);
+        match(lexer::SEMI);
+        return new PrintStmt(ex);
     }
 
     ExprStmt *exprStmt() {
@@ -389,7 +428,7 @@ namespace parser {
             auto num = &(*it);
             auto p = num->value.find('.');
             match(lexer::NUMBER);
-            if (p != (std::string::npos)) { //int
+            if (p == (std::string::npos)) { //int
                 return new Int(stoi(num->value));
             } else { //
                 return new Float(stof(num->value));

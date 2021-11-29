@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include "lexer.h"
 #include "parser.h"
+#include "evaluator.h"
 #include <fstream>
 #include <streambuf>
 #include <sstream>
@@ -30,7 +31,8 @@ int main(int argc, char **argv) {
 //    lexer::outPrintTokenList();
     parser::init(&lexer::tokenList);
     auto entry=parser::program();
-
+    auto v=new InterpretVisitor();
+    entry->accept(v);
 
     //std::string s = "((hi there))";
     //auto lp = s.begin() ;

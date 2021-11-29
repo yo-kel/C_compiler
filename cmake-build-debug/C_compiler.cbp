@@ -24,14 +24,13 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\ATLMFC\include"/>
-					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include"/>
-					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\ucrt"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\shared"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\um"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\winrt"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\cppwinrt"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="nmake /NOLOGO /f C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\Makefile VERBOSE=1 C_compiler"/>
@@ -47,14 +46,13 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\ATLMFC\include"/>
-					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include"/>
-					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\ucrt"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\shared"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\um"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\winrt"/>
-					<Add directory="D:\Windows Kits\10\include\10.0.18362.0\cppwinrt"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="D:\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="nmake /NOLOGO /f C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug\Makefile VERBOSE=1 C_compiler/fast"/>
@@ -84,6 +82,18 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/error.cpp">
+			<Option target="C_compiler"/>
+		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/error.h">
+			<Option target="C_compiler"/>
+		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/evaluator.cpp">
+			<Option target="C_compiler"/>
+		</Unit>
+		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/evaluator.h">
+			<Option target="C_compiler"/>
+		</Unit>
 		<Unit filename="C:/Users/xsj/CLionProjects/C_compiler/lexer.cpp">
 			<Option target="C_compiler"/>
 		</Unit>

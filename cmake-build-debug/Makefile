@@ -37,10 +37,10 @@ NULL=nul
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "C:\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "C:\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E rm -f
+RM = "C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -57,7 +57,7 @@ CMAKE_BINARY_DIR = C:\Users\xsj\CLionProjects\C_compiler\cmake-build-debug
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	echo >nul && "C:\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+	echo >nul && "C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -67,7 +67,7 @@ edit_cache\fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	echo >nul && "C:\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	echo >nul && "C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -117,6 +117,54 @@ C_compiler: cmake_check_build_system
 C_compiler\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\build
 .PHONY : C_compiler\fast
+
+error.obj: error.cpp.obj
+.PHONY : error.obj
+
+# target to build an object file
+error.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\error.cpp.obj
+.PHONY : error.cpp.obj
+
+error.i: error.cpp.i
+.PHONY : error.i
+
+# target to preprocess a source file
+error.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\error.cpp.i
+.PHONY : error.cpp.i
+
+error.s: error.cpp.s
+.PHONY : error.s
+
+# target to generate assembly for a file
+error.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\error.cpp.s
+.PHONY : error.cpp.s
+
+evaluator.obj: evaluator.cpp.obj
+.PHONY : evaluator.obj
+
+# target to build an object file
+evaluator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\evaluator.cpp.obj
+.PHONY : evaluator.cpp.obj
+
+evaluator.i: evaluator.cpp.i
+.PHONY : evaluator.i
+
+# target to preprocess a source file
+evaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\evaluator.cpp.i
+.PHONY : evaluator.cpp.i
+
+evaluator.s: evaluator.cpp.s
+.PHONY : evaluator.s
+
+# target to generate assembly for a file
+evaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\C_compiler.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\C_compiler.dir\evaluator.cpp.s
+.PHONY : evaluator.cpp.s
 
 lexer.obj: lexer.cpp.obj
 .PHONY : lexer.obj
@@ -199,6 +247,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... C_compiler
+	@echo ... error.obj
+	@echo ... error.i
+	@echo ... error.s
+	@echo ... evaluator.obj
+	@echo ... evaluator.i
+	@echo ... evaluator.s
 	@echo ... lexer.obj
 	@echo ... lexer.i
 	@echo ... lexer.s

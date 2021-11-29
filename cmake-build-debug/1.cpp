@@ -9,8 +9,18 @@
 
 int main(){
     //
-    a=f(1,1);
     int a;
+    a=1;
+    print(1.5);
+    print('\n');
+    print(2);
+    print('\n');
+    print(a);
+    print('\n');
+    if(a==1){
+        print('y');
+    }
+//    a=f(1,1);
 //    char b;
 //    int c;
 //    a=1;

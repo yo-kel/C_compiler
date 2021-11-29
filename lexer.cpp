@@ -103,6 +103,7 @@ int lexer::ParseToken() {
             if (cnt != 1) {
                 printf("%d %d:wrong charactor format", line, column);
             }
+            if(value=="\\n")value="\n";
             tokenList.push_back(Token{CHARACTOR, "charactor", value, line, column});
         } else if (token == '\"') { // string
             lat_pos = str;
