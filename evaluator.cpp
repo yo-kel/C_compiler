@@ -70,11 +70,11 @@ void InterpretVisitor::visit(Declaration *d) {
     }
 
     if (funcDecl != nullptr) { ;
-        this->GlobalEnvironment->set(
+        this->GlobalEnvironment->add(
                 funcDecl->typeVar->ID,
                 new CallValue(funcDecl));
     } else if (VarDecl != nullptr) {
-        this->GlobalEnvironment->set(
+        this->GlobalEnvironment->add(
                 d->typeVar->ID,
                 ValueFromAstType(VarDecl->typeVar->typeSpec->type));
     } else {
@@ -95,9 +95,8 @@ void InterpretVisitor::visit(BlockStmt *st) {
     // local variable must be declared before stmt;
     auto newEnv = new Environment();
     this->LoadEnv(newEnv);
-    for (int i = 0; i < st->localDeclList->declList.size(); i++) {
-        st->localDeclList[i].accept(this->v);
-    }
+
+    st->localDeclList->accept(this->v);
 
     for (int i = 0; i < st->statementList.size(); i++) {
         st->statementList[i]->accept(this->v);
@@ -109,7 +108,7 @@ void InterpretVisitor::visit(BlockStmt *st) {
 void InterpretVisitor::visit(IfStmt *st) {
     st->expr->accept(this->v);
     auto vc = valueCast(this->value);
-    if (vc.v_int != nullptr) {
+    if (vc.v_int == nullptr) {
         outError(TypeError);
     }
 
@@ -151,8 +150,7 @@ void InterpretVisitor::visit(PrintStmt *st) {
 
 void InterpretVisitor::visit(LocalDecl *dl) {
     for (int i = 0; i < dl->declList.size(); i++) {
-
-        this->GlobalEnvironment->set(
+        this->GlobalEnvironment->add(
                 dl->declList[i]->ID,
                 ValueFromAstType(dl->declList[i]->typeSpec->type));
     }
@@ -643,12 +641,29 @@ Value *Environment::accessValueInCurrentEnv(string name) {
     return nullptr;
 }
 
-void Environment::set(string name, Value *value) {
+void Environment::add(string name, Value *value) {
     auto c= valueCast(value);
+    auto now=this;
     if(c.v_var){
         this->valueList[name]=c.v_var->basicValue;
     }else {
         this->valueList[name] = value;
+    }
+}
+
+void Environment::set(string name, Value *value) {
+    auto c= valueCast(value);
+    auto now=this;
+    while(now!= nullptr) {
+        if(now->valueList.find(name)!=now->valueList.end()) {
+            if (c.v_var) {
+                now->valueList[name] = c.v_var->basicValue;
+            } else {
+                now->valueList[name] = value;
+            }
+            break;
+        }
+        now=now->Father;
     }
 }
 

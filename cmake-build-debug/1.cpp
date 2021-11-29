@@ -7,19 +7,18 @@
 //    return 1;
 //}
 
+int f(int x,int y){
+
+}
+
 int main(){
     //
     int a;
-    a=1;
-    print(1.5);
-    print('\n');
-    print(2);
-    print('\n');
-    print(a);
-    print('\n');
-    if(a==1){
-        print('y');
-    }
+    //TODO int a,b;
+    int b;
+//    print('y');
+    a=b=1;
+    a=3;
 //    a=f(1,1);
 //    char b;
 //    int c;
@@ -30,13 +29,14 @@ int main(){
 //    b=1/2+1*3;
 
 
-//    if(a==2){
-//        a=1;
-//    }else if(a!=2){
-//        a=1;
-//    }else {
-//        a=1;
-//    }
+    if(a==1){
+        b=2;
+    }else if(a==2){
+        b=3;
+    }else {
+        b=4;
+    }
+    print(b);
 
 //    if(a>b||a>=b||a<b||a<=b&&a|b&&a&b){
 //        a=1;

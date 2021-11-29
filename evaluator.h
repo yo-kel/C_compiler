@@ -147,6 +147,7 @@ namespace environment {
         Value *accessValueInCurrentEnv(string name); // 在当前上下文中查找，用于局部变量声明检查
 
         void set(string name, Value *value);
+        void add(string name, Value *value);
 
         Environment() {
             Father = lastEnvironment = nullptr;
