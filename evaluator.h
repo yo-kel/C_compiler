@@ -26,6 +26,7 @@ namespace environment {
     public:
         virtual void Print() =0;
 
+        virtual Value* deepCopy()=0;
         virtual ~Value() {};
     };
 
@@ -39,10 +40,14 @@ namespace environment {
         void Print()override{
 
         }
+        Value* deepCopy()override{
+            return nullptr;
+        }
     };
 
     class BasicValue : public Value {
     public:
+        virtual Value* deepCopy()=0;
     };
 
 
@@ -58,7 +63,9 @@ namespace environment {
         void Print() {
             basicValue->Print();
         }
-
+        Value* deepCopy()override{
+            return basicValue->deepCopy();
+        }
         VariableValue(string &var, BasicValue *basicValue) {
             this->var = var;
             this->basicValue = basicValue;
@@ -76,6 +83,9 @@ namespace environment {
         void Print() {
             printf("%d", v);
         }
+        BasicValue* deepCopy()override{
+            return new IntValue(this->v);
+        }
     };
 
     class FloatValue : public BasicValue {
@@ -89,6 +99,10 @@ namespace environment {
         explicit FloatValue(float v) {
             this->v = v;
         }
+
+        BasicValue* deepCopy()override{
+            return new FloatValue(this->v);
+        }
     };
 
     class CharValue : public BasicValue {
@@ -101,6 +115,10 @@ namespace environment {
 
         explicit CharValue(char v) {
             this->v = v;
+        }
+
+        BasicValue* deepCopy()override{
+            return new CharValue(this->v);
         }
     };
 
@@ -133,10 +151,12 @@ namespace environment {
 
     class Environment {
     public:
+        const static int WHILE=1;
+        const static int FUNC=2;
         Environment *Father;
         Environment *lastEnvironment;
         map<string, Value *> valueList;
-        bool callEnvMark;
+        int type;
 
         Value *accessRealValue(Value *value); // 如果是变量类型，查找在符号表种的值，否则直接返回值
 
@@ -151,6 +171,12 @@ namespace environment {
 
         Environment() {
             Father = lastEnvironment = nullptr;
+            type=0;
+        }
+
+        Environment(int type){
+            Father = lastEnvironment = nullptr;
+            this->type=type;
         }
 
         ~Environment();
@@ -171,13 +197,19 @@ public:
 
     Environment *CurrentEnvironment;
 
-    bool returning;
+    const static int GOTOWHILE=1;
+    const static int GOTOFUNC=2;
+    const static int ACTIONBREAK=1;
+    const static int ACTIONCONTINUE=2;
+    int returning;
+    int action;
 
     InterpretVisitor() {
         GlobalEnvironment = CurrentEnvironment = new Environment();
         this->v = this;
         value = nullptr;
-        returning = false;
+        returning = 0;
+        action=0;
     }
 
     void LoadVisitor(Visitor *v) {
@@ -215,6 +247,8 @@ public:
     void visit(parser::IfStmt *st) override;
 
     void visit(parser::WhileStmt *st) override;
+    void visit(parser::BreakStmt *st) override;
+    void visit(parser::ContinueStmt *st) override;
 
     void visit(parser::ReturnStmt *st) override;
 
@@ -224,7 +258,7 @@ public:
 
     void visit(Assign *expr)override;
 
-    void visit(parser::Equal *expr) override;
+//    void visit(parser::Equal *expr) override;
 
     void visit(parser::Comp *expr) override;
 

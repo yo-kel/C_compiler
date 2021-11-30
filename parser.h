@@ -96,6 +96,8 @@ namespace parser {
         virtual void visit(IfStmt *st) = 0;
 
         virtual void visit(WhileStmt *st) = 0;
+        virtual void visit(BreakStmt *st) = 0;
+        virtual void visit(ContinueStmt *st) = 0;
 
         virtual void visit(ReturnStmt *st) = 0;
 
@@ -106,7 +108,7 @@ namespace parser {
 
         virtual void visit(Assign *expr) = 0;
 
-        virtual void visit(Equal *expr) = 0;
+//        virtual void visit(Equal *expr) = 0;
 
         virtual void visit(Comp *expr) = 0;
 
@@ -172,9 +174,9 @@ namespace parser {
 
     Expr *expr(); // Equality{ = Equality}* | Equality    actually should be called Assign
 
-    Expr *equality(); // COMP {( == | != ) COMP}* |COMP
+//    Expr *equality(); // COMP {( == | != ) COMP}* |COMP
 
-    Expr *comp(); // TERM {( > | >= | < | <= | && | || | | | & ) TERM }*
+    Expr *comp(); // TERM {( == | != || > | >= | < | <= | && | || | | | & ) TERM }*
 
     Expr *term(); // FACTOR (( + | - ) FACTOR)* | FACTOR
 
@@ -372,7 +374,7 @@ namespace parser {
         }
 
         void accept(Visitor *v) override {
-
+            v->visit(this);
         }
     };
 
@@ -381,7 +383,7 @@ namespace parser {
         BreakStmt() {}
 
         void accept(Visitor *v) override {
-
+            v->visit(this);
         }
     };
 
@@ -413,20 +415,20 @@ namespace parser {
         }
     };
 
-    class Equal : public Expr {
-    public:
-        Equal(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
-
-        void accept(Visitor *v) {
-            v->visit(this);
-        }
-    };
+//    class Equal : public Expr {
+//    public:
+//        Equal(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
+//
+//        void accept(Visitor *v) override{
+//            v->visit(this);
+//        }
+//    };
 
     class Comp : public Expr {
     public:
         Comp(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -435,7 +437,7 @@ namespace parser {
     public:
         Term(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -444,7 +446,7 @@ namespace parser {
     public:
         Factor(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -453,7 +455,7 @@ namespace parser {
     public:
         Unary(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -462,7 +464,7 @@ namespace parser {
     public:
         Postfix(Expr *exp, vector<OpeExpr> &exprList) : Expr(exp, exprList) {}
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -506,7 +508,7 @@ namespace parser {
             this->value = value;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -519,7 +521,7 @@ namespace parser {
             this->value = value;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -532,7 +534,7 @@ namespace parser {
             this->value = value;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };
@@ -560,7 +562,7 @@ namespace parser {
             this->args = args;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v) override{
             v->visit(this);
         }
     };
@@ -587,7 +589,7 @@ namespace parser {
             this->expr = expr;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v) override{
             v->visit(this);
         }
     };
@@ -600,7 +602,7 @@ namespace parser {
             expr = expr1;
         }
 
-        void accept(Visitor *v) {
+        void accept(Visitor *v)override {
             v->visit(this);
         }
     };

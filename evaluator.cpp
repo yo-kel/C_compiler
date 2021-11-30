@@ -97,11 +97,17 @@ void InterpretVisitor::visit(BlockStmt *st) {
     this->LoadEnv(newEnv);
 
     st->localDeclList->accept(this->v);
-
     for (int i = 0; i < st->statementList.size(); i++) {
         st->statementList[i]->accept(this->v);
-    }
 
+        // execute goto stmt;
+        if (this->returning) {
+            if (this->CurrentEnvironment != nullptr && this->CurrentEnvironment->type != this->returning) {
+                this->SwitchEnvBack();
+                return;
+            } else this->returning = 0;
+        }
+    }
     this->SwitchEnvBack();
 }
 
@@ -115,31 +121,56 @@ void InterpretVisitor::visit(IfStmt *st) {
     if (vc.v_int->v == 1) {
         st->statement1->accept(this->v);
     } else if (vc.v_int->v == 0) {
-        st->statement2->accept(this->v);
+        if(st->statement2)st->statement2->accept(this->v);
     } else {
         outError(TypeError);
     }
 }
 
 void InterpretVisitor::visit(WhileStmt *st) {
+    auto newEnv = new Environment(Environment::WHILE);
+    this->LoadEnv(newEnv);
     while (true) {
-        if (this->returning)
-            st->expr->accept(this->v);
+        st->expr->accept(this->v);
         auto vc = valueCast(this->value);
+        if(!vc.v_int){
+            outError(error::TypeError);
+        }
         if (vc.v_int->v == 1) {
             st->statement->accept(this->v);
-        } else if (vc.v_int->v == 1) {
+        } else if (vc.v_int->v == 0) {
             break;
-        } else {
-            outError(TypeError);
+        }
+
+        if (this->returning) {
+            //cout<<this->CurrentEnvironment->type<<" "<<this->returning<<endl;
+            if (this->CurrentEnvironment != nullptr && this->CurrentEnvironment->type != this->returning) {
+                this->SwitchEnvBack();
+                return;
+            } else if(this->CurrentEnvironment != nullptr && this->CurrentEnvironment->type == this->returning){
+                this->returning = 0;
+                if (this->action == InterpretVisitor::ACTIONBREAK)break;
+                else if (this->action == InterpretVisitor::ACTIONCONTINUE)continue;
+            }
         }
     }
+    this->SwitchEnvBack();
+}
+
+void InterpretVisitor::visit(BreakStmt *st) {
+    this->returning = InterpretVisitor::GOTOWHILE;
+    this->action = InterpretVisitor::ACTIONBREAK;
+}
+
+void InterpretVisitor::visit(ContinueStmt *st) {
+    this->returning = InterpretVisitor::GOTOWHILE;
+    this->action = InterpretVisitor::ACTIONCONTINUE;
 }
 
 void InterpretVisitor::visit(ReturnStmt *st) {
     st->expr->accept(this->v);
     // TODO 遇到函数返回，要控制代码结束,whileStmt,blockStmt要中止语句
-    this->returning = true;
+    this->returning = InterpretVisitor::GOTOFUNC;
 }
 
 void InterpretVisitor::visit(PrintStmt *st) {
@@ -180,8 +211,10 @@ void InterpretVisitor::visit(Assign *expr) {
             outError(EqualLeftVar);
         }
         auto v_var = dynamic_cast<VariableValue *>(v_);
-        auto realValue = this->CurrentEnvironment->accessRealValue(v2);
-        this->CurrentEnvironment->set(v_var->var, realValue);
+
+        auto copy=v2->deepCopy();
+        this->CurrentEnvironment->set(v_var->var, copy);
+        v_var->basicValue=dynamic_cast<BasicValue*>(copy);
     }
     if (expr->exprList.size()) {
 
@@ -189,21 +222,70 @@ void InterpretVisitor::visit(Assign *expr) {
         expr->exprList[0].expr->accept(this->v);
         auto v2 = getValue();
 
-        auto realValue = this->CurrentEnvironment->accessRealValue(v2);
-        this->CurrentEnvironment->set(v_var->var, realValue);
+//        puts("----");
+//        v2->Print();
+//        puts("");
+
+
+        auto copy=v2->deepCopy();
+        this->CurrentEnvironment->set(v_var->var, copy);
+        v_var->basicValue=dynamic_cast<BasicValue*>(copy);
     }
-    this->value = new VariableValue(v_var->var);
+//    puts("----");
+//    v_var->basicValue->Print();
+//    puts("");
+    this->value = new VariableValue(v_var->var,dynamic_cast<BasicValue*>(v_var->basicValue->deepCopy()));
 }
 
-void InterpretVisitor::visit(Equal *expr) {
+//void InterpretVisitor::visit(Equal *expr) {
+//    expr->exp->accept(this->v);
+//    auto v1 = this->CurrentEnvironment->accessRealValue(this->value);
+//    for (int i = 0; i < expr->exprList.size(); i++) {
+//        auto p = expr->exprList[i];
+//        p.expr->accept(this->v);
+//        auto v2 = this->CurrentEnvironment->accessRealValue(this->value);
+//        auto c1 = valueCast(v1);
+//        auto c2 = valueCast(v2);
+//        switch (p.ope->type) {
+//            case lexer::EQ:
+//                if (c1.v_int && c2.v_int) {
+//                    v1 = new IntValue((c1.v_int->v) == (c2.v_int->v));
+//                } else if (c1.v_float && c2.v_float) {
+//                    v1 = new FloatValue((c1.v_float->v) == (c2.v_float->v));
+//                } else if (c1.v_char && c2.v_char) {
+//                    v1 = new CharValue(char(c1.v_char->v == c2.v_char->v));
+//                } else {
+//                    outError(error::TypeError);
+//                }
+//                break;
+//            case lexer::NE:
+//                if (c1.v_int && c2.v_int) {
+//                    v1 = new IntValue((c1.v_int->v) != (c2.v_int->v));
+//                } else if (c1.v_float && c2.v_float) {
+//                    v1 = new FloatValue((c1.v_float->v) != (c2.v_float->v));
+//                } else if (c1.v_char && c2.v_char) {
+//                    v1 = new CharValue(char(c1.v_char->v != c2.v_char->v));
+//                } else {
+//                    outError(error::TypeError);
+//                }
+//                break;
+//        }
+//        this->value = v1;
+//    }
+//}
+
+void InterpretVisitor::visit(Comp *expr) {
     expr->exp->accept(this->v);
     auto v1 = this->CurrentEnvironment->accessRealValue(this->value);
     for (int i = 0; i < expr->exprList.size(); i++) {
         auto p = expr->exprList[i];
+
         p.expr->accept(this->v);
         auto v2 = this->CurrentEnvironment->accessRealValue(this->value);
+
         auto c1 = valueCast(v1);
         auto c2 = valueCast(v2);
+
         switch (p.ope->type) {
             case lexer::EQ:
                 if (c1.v_int && c2.v_int) {
@@ -227,69 +309,47 @@ void InterpretVisitor::visit(Equal *expr) {
                     outError(error::TypeError);
                 }
                 break;
-        }
-        this->value = v1;
-    }
-}
-
-void InterpretVisitor::visit(Comp *expr) {
-    expr->exp->accept(this->v);
-    auto v1 = this->CurrentEnvironment->accessRealValue(this->value);
-    for (int i = 0; i < expr->exprList.size(); i++) {
-        auto p = expr->exprList[i];
-
-        p.expr->accept(this->v);
-        auto v2 = this->CurrentEnvironment->accessRealValue(this->value);
-
-        auto v1_int = dynamic_cast<IntValue *>(v1);
-        auto v2_int = dynamic_cast<IntValue *>(v2);
-        auto v1_float = dynamic_cast<FloatValue *>(v1);
-        auto v2_float = dynamic_cast<FloatValue *>(v2);
-        auto v1_char = dynamic_cast<CharValue *>(v1);
-        auto v2_char = dynamic_cast<CharValue *>(v2);
-
-        switch (p.ope->type) {
             case lexer::GT:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) > (v2_int->v));
-                } else if (v1_float && v2_float) {
-                    v1 = new IntValue((v1_float->v) > (v2_float->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) > (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) > ( c2.v_int->v));
+                } else if (c1.v_float && c2.v_float) {
+                    v1 = new IntValue((c1.v_float->v) > (c2.v_float->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) > (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
                 break;
             case lexer::GTE:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) >= (v2_int->v));
-                } else if (v1_float && v2_float) {
-                    v1 = new IntValue((v1_float->v) >= (v2_float->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) >= (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) >= ( c2.v_int->v));
+                } else if (c1.v_float && c2.v_float) {
+                    v1 = new IntValue((c1.v_float->v) >= (c2.v_float->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) >= (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
                 break;;
             case lexer::LT:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) < (v2_int->v));
-                } else if (v1_float && v2_float) {
-                    v1 = new IntValue((v1_float->v) < (v2_float->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) < (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) < ( c2.v_int->v));
+                } else if (c1.v_float && c2.v_float) {
+                    v1 = new IntValue((c1.v_float->v) < (c2.v_float->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) < (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
                 break;
 
             case lexer::LTE:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) <= (v2_int->v));
-                } else if (v1_float && v2_float) {
-                    v1 = new IntValue((v1_float->v) <= (v2_float->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) <= (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) <= ( c2.v_int->v));
+                } else if (c1.v_float && c2.v_float) {
+                    v1 = new IntValue((c1.v_float->v) <= (c2.v_float->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) <= (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
@@ -297,10 +357,10 @@ void InterpretVisitor::visit(Comp *expr) {
 
 
             case lexer::AND:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) && (v2_int->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) && (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) && ( c2.v_int->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) && (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
@@ -308,28 +368,28 @@ void InterpretVisitor::visit(Comp *expr) {
 
 
             case lexer::OR:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) || (v2_int->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) || (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) || ( c2.v_int->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) || (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
                 break;
             case lexer::LAND:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) & (v2_int->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) & (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) & ( c2.v_int->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) & (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
                 break;
             case lexer::LOR:
-                if (v1_int && v2_int) {
-                    v1 = new IntValue((v1_int->v) | (v2_int->v));
-                } else if (v1_char && v2_char) {
-                    v1 = new IntValue((v1_char->v) | (v2_char->v));
+                if (c1.v_int && c2.v_int) {
+                    v1 = new IntValue((c1.v_int->v) | ( c2.v_int->v));
+                } else if (c1.v_char && c2.v_char) {
+                    v1 = new IntValue((c1.v_char->v) | (c2.v_char->v));
                 } else {
                     outError(error::TypeError);
                 }
@@ -474,9 +534,9 @@ void InterpretVisitor::visit(Unary *expr) {
                 if (c1.v_var) {
                     auto tar = valueCast(this->CurrentEnvironment->accessValue(c1.v_var));
                     if (tar.v_char) {
-                        tar.v_char++, c1.v_char++;
+                        tar.v_char->v++, c1.v_char->v++;
                     } else if (tar.v_int) {
-                        tar.v_int++, c1.v_int++;
+                        tar.v_int->v++, c1.v_int->v++;
                     } else {
                         outError(error::TypeError);
                     }
@@ -488,9 +548,9 @@ void InterpretVisitor::visit(Unary *expr) {
                 if (c1.v_var) {
                     auto tar = valueCast(this->CurrentEnvironment->accessValue(c1.v_var));
                     if (tar.v_char) {
-                        tar.v_char--;
+                        tar.v_char->v--;
                     } else if (tar.v_int) {
-                        tar.v_int--;
+                        tar.v_int->v--;
                     } else {
                         outError(error::TypeError);
                     }
@@ -518,22 +578,23 @@ void InterpretVisitor::visit(Postfix *expr) {
                 if (c1.v_var) {
                     auto tar = valueCast(this->CurrentEnvironment->accessValue(c1.v_var));
                     if (tar.v_char) {
-                        tar.v_char--;
+                        tar.v_char->v++;
                     } else if (tar.v_int) {
-                        tar.v_int--;
+                        tar.v_int->v++;
                     } else {
                         outError(error::TypeError);
                     }
                 } else {
                     outError(error::TypeError);
                 }
+                break;
             case lexer::DEC:
                 if (c1.v_var) {
                     auto tar = valueCast(this->CurrentEnvironment->accessValue(c1.v_var));
                     if (tar.v_char) {
-                        tar.v_char--;
+                        tar.v_char->v--;
                     } else if (tar.v_int) {
-                        tar.v_int--;
+                        tar.v_int->v--;
                     } else {
                         outError(error::TypeError);
                     }
@@ -565,7 +626,7 @@ void InterpretVisitor::visit(Var *expr) {
     if (v == nullptr) {
         outError(error::TypeError);
     }
-    this->value = new VariableValue(expr->ID->value, v);
+    this->value = new VariableValue(expr->ID->value,dynamic_cast<BasicValue *>(v->deepCopy()));
 
 }
 
@@ -585,7 +646,7 @@ void InterpretVisitor::visit(Call *expr) {
     }
 
 
-    auto newEnv = new Environment();
+    auto newEnv = new Environment(Environment::FUNC);
 
     for (int i = 0; i < expr->args.size(); i++) {
         auto arg = expr->args[i];
@@ -597,9 +658,8 @@ void InterpretVisitor::visit(Call *expr) {
         }
 
         // prepare new environment for function call
-        newEnv->set(func->funcDecl->params->params[i].ID, v);
+        newEnv->add(func->funcDecl->params->params[i].ID, v);
     }
-    this->CurrentEnvironment->callEnvMark = true;
     this->LoadEnvWithoutContext(newEnv);
     //switch environment and execute calling function
     func->funcDecl->blockStmt->accept(this->v);
@@ -642,20 +702,20 @@ Value *Environment::accessValueInCurrentEnv(string name) {
 }
 
 void Environment::add(string name, Value *value) {
-    auto c= valueCast(value);
-    auto now=this;
-    if(c.v_var){
-        this->valueList[name]=c.v_var->basicValue;
-    }else {
+    auto c = valueCast(value);
+    auto now = this;
+    if (c.v_var) {
+        this->valueList[name] = c.v_var->basicValue;
+    } else {
         this->valueList[name] = value;
     }
 }
 
 void Environment::set(string name, Value *value) {
-    auto c= valueCast(value);
-    auto now=this;
-    while(now!= nullptr) {
-        if(now->valueList.find(name)!=now->valueList.end()) {
+    auto c = valueCast(value);
+    auto now = this;
+    while (now != nullptr) {
+        if (now->valueList.find(name) != now->valueList.end()) {
             if (c.v_var) {
                 now->valueList[name] = c.v_var->basicValue;
             } else {
@@ -663,7 +723,7 @@ void Environment::set(string name, Value *value) {
             }
             break;
         }
-        now=now->Father;
+        now = now->Father;
     }
 }
 

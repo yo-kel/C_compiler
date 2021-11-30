@@ -272,13 +272,13 @@ namespace parser {
     }
 
     Expr *expr() {
-        Expr *expr1 = ::equality();
+        Expr *expr1 = ::comp();
         if (checkToken(lexer::ASSIGN)) {
             vector<Expr::OpeExpr> exprList;
             while (checkToken(lexer::ASSIGN)) {
                 auto ope = &(*it);
                 match(lexer::ASSIGN);
-                auto expr2 = ::equality();
+                auto expr2 = ::comp();
                 exprList.push_back(Expr::OpeExpr{expr2, ope});
             }
             return new Assign(expr1, exprList);
@@ -287,30 +287,33 @@ namespace parser {
         }
     }
 
-    Expr *equality() {
-        Expr *expr1 = ::comp();
-        if (checkToken(lexer::EQ) || checkToken(lexer::NE)) {
-            vector<Expr::OpeExpr> exprList;
-            while (checkToken(lexer::EQ) || checkToken(lexer::NE)) {
-                auto ope = &(*it);
-                match(ope->type);
-                auto expr2 = ::comp();
-                exprList.push_back(Expr::OpeExpr{expr2, ope});
-            }
-            return new Equal(expr1, exprList);
-        } else {
-            return expr1;
-        }
-    }
+//    Expr *equality() {
+//        Expr *expr1 = ::comp();
+//        if (checkToken(lexer::EQ) || checkToken(lexer::NE)) {
+//            vector<Expr::OpeExpr> exprList;
+//            while (checkToken(lexer::EQ) || checkToken(lexer::NE)) {
+//                auto ope = &(*it);
+//                match(ope->type);
+//                auto expr2 = ::comp();
+//                exprList.push_back(Expr::OpeExpr{expr2, ope});
+//                printf("%d\n",exprList.size());
+//            }
+//            return new Equal(expr1, exprList);
+//        } else {
+//            return expr1;
+//        }
+//    }
 
     Expr *comp() {
         Expr *expr1 = ::term();
-        if (checkToken(lexer::GT) || checkToken(lexer::GTE) ||
+        if (checkToken(lexer::EQ) || checkToken(lexer::NE) ||
+            checkToken(lexer::GT) || checkToken(lexer::GTE) ||
             checkToken(lexer::LT) || checkToken(lexer::LTE) ||
             checkToken(lexer::AND) || checkToken(lexer::OR) ||
             checkToken(lexer::LAND) || checkToken(lexer::LOR)) {
             vector<Expr::OpeExpr> exprList;
-            while (checkToken(lexer::GT) || checkToken(lexer::GTE) ||
+            while (checkToken(lexer::EQ) || checkToken(lexer::NE) ||
+                   checkToken(lexer::GT) || checkToken(lexer::GTE) ||
                    checkToken(lexer::LT) || checkToken(lexer::LTE) ||
                    checkToken(lexer::AND) || checkToken(lexer::OR) ||
                    checkToken(lexer::LAND) || checkToken(lexer::LOR)) {
